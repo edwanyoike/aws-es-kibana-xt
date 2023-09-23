@@ -65,6 +65,12 @@ const yargs = require('yargs')
         demand: false,
         describe: 'request limit',
     })
+    .option('debug', {
+        alias: 'd',
+        default: false,
+        describe: 'Enable debugging mode',
+        type: 'boolean',
+    })
     .help()
     .version()
     .strict();
@@ -104,6 +110,11 @@ if ((process.env.AUTH_USER && !process.env.AUTH_PASSWORD) || (!process.env.AUTH_
     process.exit(1);
 }
 
+
+const BIND_ADDRESS = argv.b;
+const PORT = argv.p;
+const REQ_LIMIT = argv.l;
+
 // Check if PORT is a valid number
 if (isNaN(PORT) || PORT < 1 || PORT > 65535) {
     console.error('Invalid PORT number. Please provide a valid port number between 1 and 65535.');
@@ -123,9 +134,7 @@ const TARGET = (ES_ENDPOINT.startsWith('http://') || ES_ENDPOINT.startsWith('htt
     ? ES_ENDPOINT
     : `https://${ES_ENDPOINT}`; // Assuming https by default if missing
 
-const BIND_ADDRESS = argv.b;
-const PORT = argv.p;
-const REQ_LIMIT = argv.l;
+
 
 const credentials = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -144,6 +153,23 @@ const proxy = httpProxy.createProxyServer(options);
 const app = express();
 app.use(compress());
 app.use(bodyParser.raw({ limit: REQ_LIMIT, type: () => true }));
+
+
+if (argv.debug) {
+    console.log('Environmental Variables:');
+    console.log('ES_ENDPOINT:', ES_ENDPOINT);
+    console.log('REGION:', REGION);
+    console.log('AWS_ACCESS_KEY_ID:', process.env.AWS_ACCESS_KEY_ID);
+    console.log('AWS_SECRET_ACCESS_KEY:', process.env.AWS_SECRET_ACCESS_KEY);
+    console.log('AWS_SESSION_TOKEN:', process.env.AWS_SESSION_TOKEN);
+    console.log('AUTH_USER:', process.env.AUTH_USER || process.env.USER);
+    console.log('AUTH_PASSWORD:', process.env.AUTH_PASSWORD || process.env.PASSWORD);
+    console.log('BIND_ADDRESS:', BIND_ADDRESS);
+    console.log('PORT:', PORT);
+    console.log('REQ_LIMIT:', REQ_LIMIT);
+    console.log('TARGET:', TARGET);
+}
+
 
 if (argv.H) {
     app.get(argv.H, (req, res) => {
@@ -227,10 +253,15 @@ const listener = server.listen(PORT, BIND_ADDRESS, () => {
     }
 });
 
-process.on('SIGINT', () => {
-    console.log('Received SIGINT. Exiting...');
-    listener.close(() => {
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);
+
+function gracefulShutdown() {
+    console.log('Received SIGINT or SIGTERM. Exiting gracefully...');
+    // Close the server
+    server.close(() => {
         console.log('Server has closed. Exiting gracefully.');
         process.exit(0);
     });
-});
+}
+

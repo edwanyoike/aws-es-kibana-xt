@@ -23,33 +23,16 @@ Set AWS credentials example below
      export ENDPOINT="search-xxxxx.us-west-2.es.amazonaws.com"
 
 
-Run the proxy (do not include the `http` or `https` from your `cluster-endpoint` or the proxy won't function)
-aws-es-kibana <cluster-endpoint>
-
-Where cluster-endpoint can be either a URL (i.e. https://search-xxxxx.us-west-2.es.amazonaws.com) or a hostname (i.e. search-xxxxx.us-west-2.es.amazonaws.com).
-Alternatively, you can set the _AWS_PROFILE_ environment variable
-
-    AWS_PROFILE=myprofile aws-es-kibana <cluster-endpoint>
+Run the proxy in two ways
+1. aws-es-kibana-xt
+2. aws-es-kibana-xt <cluster-endpoint> #if you had not set environment variable ENDPOINT
 
 Example with hostname as cluster-endpoint:
 
-![aws-es-kibana](https://raw.githubusercontent.com/santthosh/aws-es-kibana/master/aws-es-kibana.png)
+aws-es-kibana-xt https://your-es-cluster-endpoint
 
-### Run within docker container
+### Run within docker container (under review)
 
-If you are familiar with Docker, you can run `aws-es-kibana` within a Docker container
-
-You can pull the official container for use
-
-    docker pull nyoike/aws-es-kibana-xt:latest
-
-(or) Build the image
-
-	docker build -t aws-es-kibana .
-
-Run the container (do not forget to pass the required environment variables)
-
-	docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -p 127.0.0.1:9200:9200 aws-es-kibana -b 0.0.0.0 <cluster-endpoint>
 
 
 ## Credits

@@ -12,7 +12,7 @@ const os = require('os');
 const figlet = require('figlet');
 
 const yargs = require('yargs')
-    .usage('usage: $0 [options] <aws-es-cluster-endpoint> or set ES_ENDPOINT environment variable ')
+    .usage('usage: $0 [options] --region eu-west-1 search-mykibana-es-uat-testing.eu-west-1.es.amazonaws.com')
     .option('b', {
         alias: 'bind-address',
         default: process.env.BIND_ADDRESS || '127.0.0.1',
@@ -20,6 +20,15 @@ const yargs = require('yargs')
         describe: 'the ip address to bind to',
         type: 'string',
     })
+    .option(
+        'e', {
+            alias: 'endpoint',
+            default: process.env.ES_ENDPOINT || '',
+            demand: true,
+            describe: 'the AWS ES cluster endpoint',
+            type: 'string',
+        }
+    )
     .option('p', {
         alias: 'port',
         default: process.env.PORT || 9200,
@@ -77,15 +86,16 @@ const yargs = require('yargs')
 
 const argv = yargs.argv;
 
-const ES_ENDPOINT = process.env.ES_ENDPOINT || argv._[0];
+const ES_ENDPOINT = argv.endpoint || process.env.ES_ENDPOINT;
 const REGION = argv.r || process.env.AWS_REGION;
 
 // Define an array to store error messages
 const errors = [];
 
 // Check if ES_ENDPOINT is provided
+// Check if ES_ENDPOINT is provided
 if (!ES_ENDPOINT) {
-    errors.push('Elasticsearch endpoint is required. Set ES_ENDPOINT or provide it as an argument.');
+    errors.push('Elasticsearch endpoint must be provided either through --endpoint argument or ES_ENDPOINT environment variable.');
 }
 
 // Check if REGION is provided

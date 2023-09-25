@@ -1,7 +1,6 @@
-[![npm version](https://badge.fury.io/js/aws-es-kibana.svg)](https://badge.fury.io/js/aws-es-kibana) ![dependencies](https://david-dm.org/santthosh/aws-es-kibana.svg)
-[![Docker Stars](https://img.shields.io/docker/stars/santthosh/aws-es-kibana.svg)](https://registry.hub.docker.com/v2/repositories/santthosh/aws-es-kibana/stars/count/)
+[![npm version](https://badge.fury.io/js/aws-es-kibana.svg)](https://www.npmjs.com/package/aws-es-kibana-xt) 
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/santthosh/aws-es-kibana)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/edwanyoike/aws-es-kibana-xt)
 
 # AWS ES/Kibana Proxy
 
@@ -25,11 +24,8 @@ Set AWS credentials example below
 
 Run the proxy in two ways
 1. aws-es-kibana-xt
-2. aws-es-kibana-xt <cluster-endpoint> #if you had not set environment variable ENDPOINT
+2.  aws-es-kibana-xt  --region eu-west-1 search-mykibana-es-uat-testing.eu-west-1.es.amazonaws.com
 
-Example with hostname as cluster-endpoint:
-
-aws-es-kibana-xt https://your-es-cluster-endpoint
 
 ### Run within docker container (under review)
 

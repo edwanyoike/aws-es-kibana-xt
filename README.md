@@ -1,7 +1,6 @@
-[![npm version](https://badge.fury.io/js/aws-es-kibana.svg)](https://badge.fury.io/js/aws-es-kibana) ![dependencies](https://david-dm.org/santthosh/aws-es-kibana.svg)
-[![Docker Stars](https://img.shields.io/docker/stars/santthosh/aws-es-kibana.svg)](https://registry.hub.docker.com/v2/repositories/santthosh/aws-es-kibana/stars/count/)
+[![npm version](https://badge.fury.io/js/aws-es-kibana.svg)](https://www.npmjs.com/package/aws-es-kibana-xt) 
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/santthosh/aws-es-kibana)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/edwanyoike/aws-es-kibana-xt)
 
 # AWS ES/Kibana Proxy
 
@@ -23,33 +22,13 @@ Set AWS credentials example below
      export ENDPOINT="search-xxxxx.us-west-2.es.amazonaws.com"
 
 
-Run the proxy (do not include the `http` or `https` from your `cluster-endpoint` or the proxy won't function)
-aws-es-kibana <cluster-endpoint>
+Run the proxy in two ways
+1. aws-es-kibana-xt
+2.  aws-es-kibana-xt  --region eu-west-1 search-mykibana-es-uat-testing.eu-west-1.es.amazonaws.com
 
-Where cluster-endpoint can be either a URL (i.e. https://search-xxxxx.us-west-2.es.amazonaws.com) or a hostname (i.e. search-xxxxx.us-west-2.es.amazonaws.com).
-Alternatively, you can set the _AWS_PROFILE_ environment variable
 
-    AWS_PROFILE=myprofile aws-es-kibana <cluster-endpoint>
+### Run within docker container (under review)
 
-Example with hostname as cluster-endpoint:
-
-![aws-es-kibana](https://raw.githubusercontent.com/santthosh/aws-es-kibana/master/aws-es-kibana.png)
-
-### Run within docker container
-
-If you are familiar with Docker, you can run `aws-es-kibana` within a Docker container
-
-You can pull the official container for use
-
-    docker pull nyoike/aws-es-kibana-xt:latest
-
-(or) Build the image
-
-	docker build -t aws-es-kibana .
-
-Run the container (do not forget to pass the required environment variables)
-
-	docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY -p 127.0.0.1:9200:9200 aws-es-kibana -b 0.0.0.0 <cluster-endpoint>
 
 
 ## Credits
